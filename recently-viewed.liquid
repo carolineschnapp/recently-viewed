@@ -51,7 +51,7 @@ Shopify.Products.showRecentlyViewed( { howManyToShow:4 } );
 /* Some styles to get you started */
 
 .collection {
-overflow: hidden;
+clear:both;
 }
 
 .collection .product {
@@ -99,5 +99,17 @@ font-size: 11px;
 color: #777;
 font-weight: normal;
 }
+
+/* new clearfix */
+.clearfix:after {
+	visibility: hidden;
+	display: block;
+	font-size: 0;
+	content: " ";
+	clear: both;
+	height: 0;
+	}
+* html .clearfix             { zoom: 1; } /* IE6 */
+*:first-child+html .clearfix { zoom: 1; } /* IE7 */
 
 </style>
