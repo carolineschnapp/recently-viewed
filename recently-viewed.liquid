@@ -39,7 +39,63 @@ if (typeof Shopify.resizeImage === 'undefined') {
 <script type="text/javascript" charset="utf-8">
 //<![CDATA[
 
-Shopify.Products.showRecentlyViewed( { howManyToShow:3 } );
+Shopify.Products.showRecentlyViewed( { howManyToShow:4 } );
 
 //]]>
 </script>
+
+<style>
+
+/* Some styles to get you started */
+
+.collection {
+overflow: hidden;
+}
+
+.collection .product {
+float: left;
+text-align: center;
+width: 162px; /* 160px + 1px + 1px for the borders on either side */
+margin: 0 14px 14px 0;
+padding: 0;
+position: relative; /* used to display absolutely positioned sale tag */
+overflow: hidden;
+}
+
+.collection .product.last {
+margin-right: 0;
+}
+
+.collection .product .image {
+border: 1px solid #E0E0E0;
+margin-bottom: 10px;
+height: 160px;
+overflow: hidden;
+}
+
+.collection .product .cy {
+display: block;
+margin: 0 auto;
+}
+
+.collection .product .image img {
+max-width: 160px;
+}
+
+.collection .product .title {
+display: block;
+line-height: 16px;
+font-size: 12px;
+color: #222;
+font-weight: 700;
+}
+
+.collection .product .price {
+display: block;
+line-height: 16px;
+font-size: 11px;
+color: #777;
+font-weight: normal;
+}
+
+</style>
