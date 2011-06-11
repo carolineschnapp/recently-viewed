@@ -7,7 +7,7 @@ jQuery template plugin ("http://api.jquery.com/category/plugins/templates":http:
 
 h2. Installation
 
-http://wiki.shopify.com/Recently_Viewed_Products
+"http://wiki.shopify.com/Recently_Viewed_Products":http://wiki.shopify.com/Recently_Viewed_Products
 
 h2. Configuration
 
