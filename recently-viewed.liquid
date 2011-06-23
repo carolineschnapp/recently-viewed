@@ -3,6 +3,7 @@
 </div>
 
 <script id="recently-viewed-product-template"  type="text/x-jquery-tmpl">
+{% raw %}
 <div id="product-${handle}" class="product">
   <div class="image">
     <a href="${url}" class="cy">
@@ -12,10 +13,11 @@
   <div class="details">
     <a href="${url}">
       <span class="title">${title}</span>
-      <span class="price">${Shopify.formatMoney(price)}</span>
+      <span class="price">{{if price_varies}}From {{/if}}${Shopify.formatMoney(price)}</span>
     </a>
   </div>
 </div>
+{% endraw %}
 </script>
 
 <script type="text/javascript" charset="utf-8">
