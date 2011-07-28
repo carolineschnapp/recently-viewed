@@ -13,7 +13,7 @@
   <div class="details">
     <a href="${url}">
       <span class="title">${title}</span>
-      <span class="price">{{if price_varies}}From {{/if}}${Shopify.formatMoney(price)}</span>
+      <span class="price">{{if price_varies}}From {{/if}}{{html Shopify.formatMoney(price)}}</span>
     </a>
   </div>
 </div>
