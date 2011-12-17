@@ -77,7 +77,7 @@ jQuery.cookie=function(b,j,m){if(typeof j!="undefined"){m=m||{};if(j===null){j="
            // We will keep track of callbacks.          
            var counter = 0;
            // Getting each product with an Ajax call and rendering it on the page.
-           for (var i=0; i<howManyToShow; i++) {
+           for (var i=0; i<howManyToShow; i++) {            
              jQuery.getJSON('/products/' + recentlyViewed[i] + '.js', function(product) {
                // Render template with product and append to wrapper.
                template.tmpl(product).appendTo(wrapper);
@@ -96,6 +96,26 @@ jQuery.cookie=function(b,j,m){if(typeof j!="undefined"){m=m||{};if(j===null){j="
            }      
          }      
        }
+
+     },
+
+     getConfig: function() {
+       return config;
+     },
+
+     clearList: function() {
+       cookie.destroy();      
+     },
+     
+     recordRecentlyViewed: function(params) {
+
+       var params = params || {};
+
+       // Update defaults.
+       jQuery.extend(config, params);
+
+       // Read cookie.
+       var recentlyViewed = cookie.read();
 
        // If we are on a product page.
        if (window.location.pathname.indexOf('/products/') !== -1) {
@@ -121,15 +141,7 @@ jQuery.cookie=function(b,j,m){if(typeof j!="undefined"){m=m||{};if(j===null){j="
          cookie.write(recentlyViewed);
 
        }
-
-     },
-
-     getConfig: function() {
-       return config;
-     },
-
-     clearList: function() {
-       cookie.destroy();      
+       
      }
 
    };

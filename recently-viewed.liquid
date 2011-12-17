@@ -2,8 +2,8 @@
   <h2>Recently Viewed Products</h2>
 </div>
 
-<script id="recently-viewed-product-template"  type="text/x-jquery-tmpl">
 {% raw %}
+<script id="recently-viewed-product-template"  type="text/x-jquery-tmpl">
 <div id="product-${handle}" class="product">
   <div class="image">
     <a href="${url}" class="cy">
@@ -13,12 +13,12 @@
   <div class="details">
     <a href="${url}">
       <span class="title">${title}</span>
-      <span class="price">{{if price_varies}}From {{/if}}{{html Shopify.formatMoney(price)}}</span>
+      <span class="price">{{if price_varies}}From {{/if}}${Shopify.formatMoney(price)}</span>
     </a>
   </div>
 </div>
-{% endraw %}
 </script>
+{% endraw %}
 
 <script type="text/javascript" charset="utf-8">
 //<![CDATA[
@@ -54,7 +54,7 @@ Shopify.Products.showRecentlyViewed( { howManyToShow:4 } );
 
 .collection {
 clear: both;
-margin-top: 30px;
+padding-top: 50px;
 }
 
 .collection .product {
@@ -105,13 +105,13 @@ font-weight: normal;
 
 /* new clearfix */
 .clearfix:after {
-	visibility: hidden;
-	display: block;
-	font-size: 0;
-	content: " ";
-	clear: both;
-	height: 0;
-	}
+visibility: hidden;
+display: block;
+font-size: 0;
+content: " ";
+clear: both;
+height: 0;
+}
 * html .clearfix             { zoom: 1; } /* IE6 */
 *:first-child+html .clearfix { zoom: 1; } /* IE7 */
 
