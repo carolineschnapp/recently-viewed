@@ -1,0 +1,34 @@
+<!-- Begin Recently Viewed Products -->
+<script type="text/javascript" charset="utf-8">
+//<![CDATA[
+
+// Including jQuery conditionnally.
+if (typeof jQuery === 'undefined') {
+  document.write({{ "http://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js" | script_tag | json }});
+  document.write('<script type="text/javascript">jQuery.noConflict();<\/script>');
+}
+
+// Including api.jquery.js conditionnally.
+if (typeof Shopify.resizeImage === 'undefined') {
+  document.write({{ "api.jquery.js" | shopify_asset_url | script_tag | json }});
+}
+
+//]]>
+</script>
+
+{{ 'http://ajax.aspnetcdn.com/ajax/jquery.templates/beta1/jquery.tmpl.min.js' | script_tag }}
+{{ 'jquery.products.min.js' | asset_url | script_tag }}
+
+{% if template contains 'product' %}
+
+<script type="text/javascript" charset="utf-8">
+//<![CDATA[
+
+Shopify.Products.recordRecentlyViewed();
+
+//]]>
+</script>
+
+{% endif %}
+
+<!-- End Recently Viewed Products -->
