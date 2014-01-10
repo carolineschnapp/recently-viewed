@@ -13,7 +13,7 @@ jQuery.cookie=function(b,j,m){if(typeof j!="undefined"){m=m||{};if(j===null){j="
 /**
  * Module to show Recently Viewed Products
  *
- * Copyright (c) 2011 Caroline Schnapp (11heavens.com)
+ * Copyright (c) 2014 Caroline Schnapp (11heavens.com)
  * Dual licensed under the MIT and GPL licenses:
  * http://www.opensource.org/licenses/mit-license.php
  * http://www.gnu.org/licenses/gpl.html
@@ -29,6 +29,11 @@ jQuery.cookie=function(b,j,m){if(typeof j!="undefined"){m=m||{};if(j===null){j="
      templateId: 'recently-viewed-product-template',
      onComplete: null
    };
+   
+   var productHandleQueue = [];
+   var wrapper = null;
+   var template = null;
+   var shown = 0;
 
    var cookie = {
      configuration: {
@@ -50,9 +55,50 @@ jQuery.cookie=function(b,j,m){if(typeof j!="undefined"){m=m||{};if(j===null){j="
      },
      destroy: function() {
        jQuery.cookie(this.name, null, this.configuration);
+     },
+     remove: function(productHandle) {
+       var recentlyViewed = this.read();
+       var position = jQuery.inArray(productHandle, recentlyViewed);
+       if (position !== -1) {
+         recentlyViewed.splice(position, 1);
+         this.write(recentlyViewed);
+       }       
      }
    };
-
+   
+   var finalize = function() {
+     wrapper.show();
+     // If we have a callback.
+     if (config.onComplete) {
+       try { config.onComplete() } catch (error) { }
+     }  
+   };
+   
+   var moveAlong = function() {
+     if (productHandleQueue.length && shown < config.howManyToShow) {
+       jQuery.ajax({
+         dataType: 'json',
+         url: '/products/' + productHandleQueue[0] + '.js',
+         cache: false,
+         success: function(product) {
+           template.tmpl(product).appendTo(wrapper); 
+           productHandleQueue.shift();
+           shown++;
+           moveAlong();
+         },
+         error: function() {
+           cookie.remove(productHandleQueue[0]);
+           productHandleQueue.shift();
+           moveAlong();
+         }
+       });
+     }
+     else {
+       finalize();
+     }
+     
+   };
+   
    return {
 
      showRecentlyViewed: function(params) {
@@ -63,38 +109,19 @@ jQuery.cookie=function(b,j,m){if(typeof j!="undefined"){m=m||{};if(j===null){j="
        jQuery.extend(config, params);
 
        // Read cookie.
-       var recentlyViewed = cookie.read();
-
+       productHandleQueue = cookie.read();
+       
+       // Template and element where to insert.
+       template = jQuery('#' + config.templateId);
+       wrapper = jQuery('#' + config.wrapperId);
+       
        // How many products to show.
-       var howManyToShow = Math.min(recentlyViewed.length, config.howManyToShow);
+       config.howManyToShow = Math.min(productHandleQueue.length, config.howManyToShow);
 
        // If we have any to show.
-       if (howManyToShow) {
-         var template = jQuery('#' + config.templateId);
-         var wrapper = jQuery('#' + config.wrapperId);      
-         // If we have a template and a div on a page to add the recently viewed products in.
-         if (template.length && wrapper.length) {
-           // We will keep track of callbacks.          
-           var counter = 0;
-           // Getting each product with an Ajax call and rendering it on the page.
-           for (var i=0; i<howManyToShow; i++) {            
-             jQuery.getJSON('/products/' + recentlyViewed[i] + '.js', function(product) {
-               // Render template with product and append to wrapper.
-               template.tmpl(product).appendTo(wrapper);
-               // Keeping track of how many we have done so far.
-               counter++;
-               // Have we done them all? If so, let's do the post-treatment.
-               if (counter === howManyToShow) {
-                 // If wrapper had been hidden.
-                 wrapper.show();
-                 // If we have a callback.
-                 if (config.onComplete) {
-                   try { config.onComplete() } catch (error) { }
-                 }
-               } 
-             });
-           }      
-         }      
+       if (config.howManyToShow && template.length && wrapper.length) {
+         // Getting each product with an Ajax call and rendering it on the page.
+         moveAlong();    
        }
 
      },
@@ -127,7 +154,7 @@ jQuery.cookie=function(b,j,m){if(typeof j!="undefined"){m=m||{};if(j===null){j="
          // If not in memory.
          if (position === -1) {
            // Add product at the start of the list.
-           var newLength = recentlyViewed.unshift(productHandle);
+           recentlyViewed.unshift(productHandle);
            // Only keep what we need.
            recentlyViewed = recentlyViewed.splice(0, config.howManyToStoreInMemory);
          }
