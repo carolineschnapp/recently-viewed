@@ -100,6 +100,17 @@ jQuery.cookie=function(b,j,m){if(typeof j!="undefined"){m=m||{};if(j===null){j="
    };
    
    return {
+    
+     resizeImage: function(image, size) {
+       // This has been lifted from Shopify's api.jquery.js.
+       try {
+         if (size == 'original') { return image; }
+         else {      
+           var matches = image.match(/(.*\/[\w\-\_\.]+)\.(\w{2,4})/);
+           return matches[1] + '_' + size + '.' + matches[2];
+         }    
+       } catch (e) { return image; }    
+     },
 
      showRecentlyViewed: function(params) {
 
