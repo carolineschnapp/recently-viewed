@@ -101,15 +101,25 @@ jQuery.cookie=function(b,j,m){if(typeof j!="undefined"){m=m||{};if(j===null){j="
    
    return {
     
-     resizeImage: function(image, size) {
-       // This has been lifted from Shopify's api.jquery.js.
-       try {
-         if (size == 'original') { return image; }
-         else {      
-           var matches = image.match(/(.*\/[\w\-\_\.]+)\.(\w{2,4})/);
-           return matches[1] + '_' + size + '.' + matches[2];
-         }    
-       } catch (e) { return image; }    
+     resizeImage: function(src, size) {
+       if (size == null) {
+         return src;
+       }
+
+       if (size == 'master') {
+         return src.replace(/http(s)?:/, "");
+       }
+
+       var match  = src.match(/\.(jpg|jpeg|gif|png|bmp|bitmap|tiff|tif)(\?v=\d+)?/i);
+
+       if (match != null) {
+         var prefix = src.split(match[0]);
+         var suffix = match[0];
+
+         return (prefix[0] + "_" + size + suffix).replace(/http(s)?:/, "")
+       } else {
+         return null;
+       }
      },
 
      showRecentlyViewed: function(params) {
